@@ -33,7 +33,7 @@ namespace WindowsFormsApp5
             DataTable dt = new DataTable();
             DataRow dr;
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 30; i++)
             {
                 dr = ds1.Tables[0].NewRow();
                 dr["DataColumn1"] = i.ToString();
@@ -66,6 +66,7 @@ namespace WindowsFormsApp5
         void PrintingSystem_PrintProgress(object sender, PrintProgressEventArgs e)
         {
             Debug.WriteLine(string.Format("{0} : {1}", "프린터 인쇄 중", e.PageIndex));
+            Console.WriteLine(e.PrintAction);
         }
 
         void PrintingSystem_EndPrint(object sender, EventArgs e)
