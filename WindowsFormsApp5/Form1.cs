@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Printing;
+using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -99,11 +100,27 @@ namespace WindowsFormsApp5
                 //    //}
                 //}
 
-                var printQueue1 = ps.GetPrintQueue("Canon MF8200C Series UFRII LT");
+                var printQueue1 = ps.GetPrintQueue(this.textBox1.Text);
                 statusReport = string.Empty;
                 Debug.WriteLine($"{printQueue1.FullName}  [{printQueue1.QueueStatus}]");
                 SpotTroubleUsingQueueAttributes(ref statusReport, printQueue1);
                 Debug.WriteLine($"{printQueue1.FullName}  [{statusReport}]");
+
+
+                ServiceController service = new ServiceController("Spooler");
+                Debug.WriteLine(service.Status.ToString());
+                if ((!service.Status.Equals(ServiceControllerStatus.Stopped)) &&
+                    (!service.Status.Equals(ServiceControllerStatus.StopPending)))
+                {
+                    //lblStatus.Text = "Stopping spooler...";
+                    //lblStatus.Refresh();
+
+                    service.Stop();
+                    service.WaitForStatus(ServiceControllerStatus.Stopped);
+                }
+
+                //service.Start();
+                //service.WaitForStatus(ServiceControllerStatus.Running);
 
             }));
         }
